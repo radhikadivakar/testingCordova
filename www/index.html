@@ -1,0 +1,348 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    <!--
+         Customize the content security policy in the meta tag below as needed. Add 'unsafe-inline' to default-src to enable inline JavaScript.
+         For details, see http://go.microsoft.com/fwlink/?LinkID=617521
+
+     <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *"> -->
+    <title>CountyUser App 1.0</title>
+
+    <!-- POSCountyUser references -->
+    <script src="scripts/modernizr.js" type="text/javascript"></script>
+    <link href="css/index.css" rel="stylesheet" />
+
+
+    <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css'>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="scripts/jquery.1.5.2.min.js"></script>
+    <script src="scripts/jquery.alphanum.js"></script>
+    <script src="scripts/jquery.jsonp-2.4.0.min.js"></script>
+    <script src="scripts/index.js"></script>
+
+
+</head>
+<body>
+    <div class="maindivbox">
+
+        <div class="login">
+            <input id="lblErr" type="text" style="border:none;background-color:transparent;color:red;width:100%;" disabled="disabled" />&nbsp;
+            <fieldset>
+                <div class="logo_app"><img id="imgLogo" src="" alt="Logo" style="float:right;" /></div>
+                <legend class="legend">User Login </legend>
+                <div class="titleconti">
+                    <span id="lblCompany" style="font-size:x-large" class="loginspan2">---</span>
+                    <span class="loginspan2" id="lblAdd1">---</span>
+                    <span id="lblAdd2" class="loginspan2">---</span>
+                </div>
+                <div class="input">
+                    <input id="txtUID" placeholder="User ID" required onclick="    return fnSpanHide(this)" onblur="return fnSpanShow(this)" onfocus="    return fnSpanHide(this)" />
+                    <span ><i style="color:#f8b07c" class="fa fa-user"></i></span>
+                </div>
+
+                <div class="input">
+                    <input id="txtPwd" type="password" placeholder="Password" required onclick="    return fnSpanHide(this)" onblur="return fnSpanShow(this)" onfocus="    return fnSpanHide(this)" />
+                    <span ><i style="color:#f8b07c" class="fa fa-lock"></i></span>
+                </div>
+                <button class="submit" id="btnLogin" type="submit" value="Login" onclick="return validateform()"> <i class="fa fa-long-arrow-right"></i></button>
+                <button id="btnCancel" class="submit2" type="submit" value="Cancel" onclick="return cancelform()"> <i class="fa fa-times"></i></button>
+
+
+            </fieldset>
+
+            <div class="feedback">
+                login successful <br />
+                redirecting...
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+
+    <!--
+       <table style="width:100%;">
+        <tr><td colspan="3"><h1 style="text-align:center;width:100%;color:orange;background-color:maroon">User Login </h1></td></tr>
+        <tr><td colspan="3" style="text-align:center;"><img id="imgLogo" src="" alt="Logo" /></td></tr>
+        <tr><td colspan="3" style="text-align:center;">  <span id="lblCompany" style="font-size:x-large">---</span>    <br />  <span id="lblAdd1">---</span>    <br />    <span id="lblAdd2">---</span> </td></tr>
+        <tr><td>&nbsp;User-ID</td><td>&nbsp;:</td><td>&nbsp;<input id="txtUID" type="text" /></td></tr>
+        <tr><td>&nbsp;Password</td><td>&nbsp;:</td><td>&nbsp;<input id="txtPwd" type="password" /></td></tr>
+        <tr>
+            <td colspan="3" style="text-align:right">
+                <input id="btnLogin" type="submit" value="Login" onclick="return validateform()" />&nbsp;
+                <input id="btnCancel" type="submit" value="Cancel" onclick="return cancelform()" />&nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align:left">
+                <!--<span id="lblErr" ></span>-->
+    <!--
+                <input id="lblErr" type="text" style="border:none;background-color:transparent;color:red;width:100%" disabled="disabled" />&nbsp;
+            </td>
+        </tr>
+
+    </table>
+
+
+    -->
+
+
+
+
+
+
+
+    <script type="text/javascript">
+        $("#txtUID").focus();
+    </script>
+    <script type="text/javascript">
+
+        function fnSpanHide(inp) {
+
+            $(inp).parent().find("span").hide();
+        }
+
+        function fnSpanShow(inp) {
+            if ($(inp).val().trim() != "") {
+                $(inp).parent().find("span").attr("style", "color:#999999");
+            }
+            else {
+                $(inp).parent().find("span").attr("style", "color:#f8b07c");
+            }
+            $(inp).parent().find("span").show();
+        }
+
+        var i = 0;
+       // var ip = "http://109.73.172.90:8031/";
+        // var ip = "http://localhost:8000/";
+     
+        var ip =IPStr();
+      
+        var LoginResult = "";
+        window.onload = loadLogin("FeeCollectionService.svc/GetCompanyData");
+
+
+
+        function loadLogin(serviceFunc) {
+            loadLoginData(serviceFunc);
+            if ($("#lblCompany").text() == "")
+                loadLoginData(serviceFunc);
+
+            //var obj = new Object();
+            //obj.username = "Konvergenz";
+            //obj.apiKey = "4dm1n2015sd0343994dsmdnw23";
+            //obj.msisdn = "0716585843";
+            //obj.body = "Received with thanks Amount: 100";
+            //obj.msgID = "";
+            //obj.accountID = "234";
+            //$.ajax({
+            //    type: "POST",
+            //    url: "http://outreach.elasticbeanstalk.com/sms/api/json",
+            //    data: JSON.stringify(obj),
+            //    dataType: "json",
+            //    success: function (data) {
+            //        alert("Amount Received !!!");
+            //    },
+            //    error: function (jqXHR, textStatus, errorThrown) {
+            //        //   alert(jqXHR.code + " - " + jqXHR.responseText + " - " + jqXHR.responseJSON);
+            //    }
+            //});
+
+        }
+
+        function loadLoginData(serviceFunc) {
+           
+            $.support.cors = true;
+            $.ajax({
+                dataType: "json",
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: ip + serviceFunc,
+                success: function (result) {
+                   
+                    var res = result.d;
+
+                    if (res != null) {
+
+                        $("#lblCompany").text(res.CompanyName);
+
+                        localStorage.setItem("CompanyName", res.CompanyName);
+
+                        if (res.CompanyLogo != null) {
+                            $("#imgLogo").attr("src", res.CompanyLogo);
+                            localStorage.setItem("CompanyLogo", res.CompanyLogo);
+                        }
+                    }
+                },
+
+                error: function (request, status, exception) {
+                    alert(status + ' ---!!! ' + exception);
+                },
+                complete: function (request, status) { $("#txtUID").val(""); $("#txtPwd").val(""); $("#txtUID").select().focus(); }
+            });
+        }
+
+
+
+
+        function getValue(serviceFunc, Param) {
+            $.support.cors = true;
+            var tk = '&token=RK2015-342AB9BA-5AED-40AA-BBEF-C041802FC3BB';
+            var msg = "";
+            $.ajax({
+                  url: ip + serviceFunc + Param + tk,
+
+              //  url: "/Administrative.svc/ValidateUserGet?type=" + JSON.stringify($("#hdFilter").val()) + "&orderby=" + $("#hdSortCol").val().split('~')[1] + " " +                           $("#hdOrderBy").val() + "&pageno=" + pageno,
+                dataType: "json",
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data != null) {
+                        var Results = data.d;
+
+                      //  alert(Results.UserID);
+                     //   localStorage.setItem("uid", Results.UserID);
+                        msg = Results.MsgType;
+
+                        if (msg == "3") {
+                            localStorage.setItem("uid", document.getElementById("txtUID").value);
+                            localStorage.setItem("pwd", document.getElementById("txtPwd").value);
+                            localStorage.setItem("UserID", Results.UserID);
+                            
+                            localStorage.setItem("AuditLoginID", Results.AuditLoginID);
+                            localStorage.setItem("FullName", Results.FullName);
+                            localStorage.setItem("MobileNo", Results.MobileNo);
+                            localStorage.setItem("CounterID", Results.CounterID);
+                            localStorage.setItem("AreaID", Results.AreaID);
+                            localStorage.setItem("RegionID", Results.RegionID);
+                            localStorage.setItem("DepartmentID", Results.DepartmentID);
+                            localStorage.setItem("UserGroupID", Results.UserGroupID);
+                            localStorage.setItem("Photo", Results.Photo);
+                            localStorage.setItem("Cess", Results.POSAccess.split(':')[0]);
+                            localStorage.setItem("Market", Results.POSAccess.split(':')[1]);
+                            localStorage.setItem("Parking", Results.POSAccess.split(':')[2]);
+
+                            
+                        }
+
+                    }
+                },
+                error: function (request, status, exception) {
+                    alert(exception + '  ' + " Error");
+                },
+                complete: function (request, status) { onLoginClick(msg); }
+            });
+
+
+        }
+
+        //function getValue(serviceFunc, Param) {
+        //    $.support.cors = true;
+        //    var tk = '&token=RK2015-342AB9BA-5AED-40AA-BBEF-C041802FC3BB';
+        //    $.ajax({
+        //        type: "GET",
+        //        url: ip + serviceFunc + Param + tk,
+        //        dataType: "json",
+        //        success: function (result) {
+        //            if (result != null) {
+        //                LoginResult = result;// result.d;
+        //                localStorage.setItem("uid",);
+        //            }
+        //        },
+        //        error: function (request, status, exception) {
+        //            alert(exception + '  ' + " Error");
+        //        },
+        //        complete: function (request, status) { onLoginClick(); }
+        //    });
+
+
+        //}
+
+        function validateform() {
+
+
+            var UID = document.getElementById("txtUID").value;
+            var Pwd = document.getElementById("txtPwd").value;
+
+            if (UID == "")
+            { $("#lblErr").val("User-ID cannot be empty !!!"); $("#txtUID").select().focus(); return false; }
+            else if (Pwd == "")
+            { $("#lblErr").val("Password cannot be empty !!!"); $("#txtPwd").select().focus(); return false; }
+            else
+            {
+
+                i = i + 1;
+                var obj = new Object();
+                obj.Name = UID;
+                obj.IDStr = Pwd;
+                //  getValue("FeeCollectionService.svc/ValidateUser",obj, "MsgType");
+                getValue("FeeCollectionService.svc/ValidateUserGet", "?UID=" + UID + "&Pwd=" + Pwd);
+                //getValue("FeeCollectionService.svc/loginUser", "?MobileNo=" + UID + "&Pwd=" + Pwd );
+
+
+            }
+        }
+
+        function onLoginClick(msg1) {
+            if (msg1 == "3") { //this.close();
+
+                $(".login").find(".submit i").removeAttr('class').addClass("fa fa-check").css({ "color": "#fff" });
+                $(".submit").css({ "background": "#24c1e3 ", "border-color": "#24c1e3" });
+                $(".feedback").show().animate({ "opacity": "1", "bottom": "-80px" }, 400);
+                $(".input").hide().animate({ "opacity": "0", "top": "-80px" }, 1200);
+                $('.login').fadeOut(1500);
+
+
+               
+                window.location = "DashBoard.html";
+                //lblErr.innerText = "Welcome " + localStorage.getItem("uid");
+
+                return true;
+            }
+
+            else if (i < 3) {
+
+
+                if (msg1 == "4")
+                { alert("Inactive User !!!"); this.close(); }
+                else if (msg1 == "2")
+                { $("#lblErr").val("Invalid Password !!!"); $("#txtPwd").select().focus(); }
+                else
+                { $("#lblErr").val("Invalid User-ID !!!"); $("#txtUID").select().focus(); }
+            }
+            else { this.close(); }
+        }
+
+        function cancelform() {
+
+            var res = confirm("Do you wish to exit 'CountyUser App 1.0'?");
+         
+            if (res == true) {
+                //this.Close();
+         
+                navigator.app.exitApp();
+            }
+        }
+
+        function exitFromApp() {
+            navigator.app.exitApp();
+        }
+
+
+    </script>
+    <!-- Cordova reference, this is added to your app when it's built. -->
+    <script src="scripts/bootstrap.js"></script>
+    <script src="cordova.js"></script>
+    <!--<script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>--> 
+    <script src="scripts/platformOverrides.js"></script>
+
+
+
+</body>
+</html>
